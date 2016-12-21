@@ -901,7 +901,12 @@ static v8::Handle<v8::Object> v8js_wrap_array_to_object(v8::Isolate *isolate, zv
 				}
 				newobj->Set(V8JS_ZSTR(key), zval_to_v8js(data, isolate TSRMLS_CC));
 			} else {
-				newobj->Set(index, zval_to_v8js(data, isolate TSRMLS_CC));
+				if (index < (ulong) std::numeric_limits<uint32_t>::min() || index > (ulong) std::numeric_limits<uint32_t>::max()) {
+					std::string indexstr = std::to_string(index);
+					newobj->Set(v8::String::NewFromUtf8(isolate, indexstr.c_str(), v8::String::kNormalString, indexstr.length()), zval_to_v8js(data, isolate TSRMLS_CC));
+				} else {
+					newobj->Set(index, zval_to_v8js(data, isolate TSRMLS_CC));
+				}
 			}
 
 			if (tmp_ht) {
