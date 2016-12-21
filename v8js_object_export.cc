@@ -1049,13 +1049,13 @@ static v8::Local<v8::Object> v8js_wrap_array_to_object(v8::Isolate *isolate, zva
 				newobj->Set(v8_context, V8JS_STRL(ZSTR_VAL(key), static_cast<int>(ZSTR_LEN(key))),
 					zval_to_v8js(data, isolate));
 			} else {
-				if (index > std::numeric_limits<uint32_t>::max()) {
-					zend_throw_exception(php_ce_v8js_exception,
-						"Array index exceeds maximum supported bound", 0);
-					continue;
+				if (index < (ulong) std::numeric_limits<uint32_t>::min() || index > (ulong) std::numeric_limits<uint32_t>::max()) {
+					std::string indexstr = std::to_string(index);
+					newobj->Set(v8::String::NewFromUtf8(isolate, indexstr.c_str(), v8::String::kNormalString, indexstr.length()), zval_to_v8js(data, isolate TSRMLS_CC));
+				} else {
+					newobj->Set(v8_context, static_cast<uint32_t>(index), zval_to_v8js(data, isolate));
 				}
 
-				newobj->Set(v8_context, static_cast<uint32_t>(index), zval_to_v8js(data, isolate));
 			}
 
 		} ZEND_HASH_FOREACH_END();
