@@ -70,7 +70,7 @@ static v8::Local<v8::Value> v8js_hash_to_jsarr(zval *value, v8::Isolate *isolate
 	v8::Local<v8::Array> newarr;
 
 	/* Prevent recursion */
-	if (myht && ZEND_HASH_GET_APPLY_COUNT(myht) > 1) {
+	if (i > 0 && myht && ZEND_HASH_GET_APPLY_COUNT(myht) > 1) {
 		return V8JS_NULL;
 	}
 
