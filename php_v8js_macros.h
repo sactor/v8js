@@ -63,7 +63,7 @@ extern "C" {
 #endif
 
 /* V8Js Version */
-#define PHP_V8JS_VERSION "1.4.1"
+#define PHP_V8JS_VERSION "2.0.0"
 
 /* Helper macros */
 #define V8JS_GET_CLASS_NAME(var, obj) \
@@ -113,7 +113,6 @@ ZEND_BEGIN_MODULE_GLOBALS(v8js)
   /* Ini globals */
   bool use_date; /* Generate JS Date objects instead of PHP DateTime */
   bool use_array_access; /* Convert ArrayAccess, Countable objects to array-like objects */
-  bool compat_php_exceptions; /* Don't stop JS execution on PHP exception */
 
   // Timer thread globals
   std::deque<v8js_timer_ctx *> timer_stack;

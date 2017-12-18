@@ -3,12 +3,12 @@ V8Js on GNU/Linux
 
 Installation of V8Js on GNU/Linux is pretty much straight forward.
 
-The biggest hurdle actually is that you need a rather new v8 library.
-However most distributions still ship the rusty version 3.14, publish
-years ago, since Node.js requires such an old version.
+The biggest hurdle actually is that you need a rather new V8 library.
+However many distributions still ship the rusty version 3.14, published
+years ago.
 
-This means that you usually need to compile v8 on your own before
-you can start to compile & install v8js itself.
+This means that you usually need to compile V8 on your own before
+you can start to compile & install V8Js itself.
 
 It is recommended to install the V8 version for V8Js off your system's
 load path, so it doesn't interfere with the V8 library shipped with your
@@ -38,7 +38,7 @@ Compile V8 5.6 and newer (using GN)
 
 ```
 # Install required dependencies
-sudo apt-get install build-essential git python libglib2.0-dev
+sudo apt-get install build-essential curl git python libglib2.0-dev
 
 cd /tmp
 
@@ -68,61 +68,6 @@ sudo cp -R include/* /opt/v8/include/
 ```
 
 
-Compile V8 versions 5.5 and older (using Gyp)
----------------------------------------------
-
-
-```
-# Install `build-essential` if you haven't already:
-sudo apt install build-essential
-
-# Install `chrpath` for fixing libv8.so's RUNPATH header, if you haven't already:
-sudo apt install chrpath
-
-cd /tmp
-
-# Install depot_tools first (needed for source checkout)
-git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-export PATH=`pwd`/depot_tools:"$PATH"
-
-# Download v8
-fetch v8
-cd v8
-
-# (optional) If you'd like to build a certain version:
-git checkout 4.9.385.28
-gclient sync
-
-# Build (with internal snapshots)
-export GYPFLAGS="-Dv8_use_external_startup_data=0"
-
-# Force gyp to use system-wide ld.gold
-export GYPFLAGS="${GYPFLAGS} -Dlinux_use_bundled_gold=0"
-
-# Compile V8 (using up to 8 CPU cores, requires a lot of RAM, adapt as needed)
-make native library=shared snapshot=on -j8
-
-# Install to /opt/v8
-sudo mkdir -p /opt/v8/{lib,include}
-sudo cp out/native/lib.target/lib*.so /opt/v8/lib/
-sudo cp -R include/* /opt/v8/include
-
-# Fix libv8.so's RUNPATH header
-sudo chrpath -r '$ORIGIN' /opt/v8/lib/libv8.so
-
-# Install libv8_libplatform.a (V8 >= 5.2.51)
-echo -e "create /opt/v8/lib/libv8_libplatform.a\naddlib out/native/obj.target/src/libv8_libplatform.a\nsave\nend" | sudo ar -M
-
-# ... same for V8 < 5.2.51, libv8_libplatform.a is built in tools/gyp directory
-echo -e "create /opt/v8/lib/libv8_libplatform.a\naddlib out/native/obj.target/tools/gyp/libv8_libplatform.a\nsave\nend" | sudo ar -M
-```
-
-`libv8_libplatform.a` should not be copied directly since it's a thin
-archive, i.e. it contains only pointers to the build objects, which
-otherwise must not be deleted.  The simple mri-script converts the
-thin archive to a normal archive.
-
-
 Compile php-v8js itself
 -----------------------
 
@@ -131,7 +76,7 @@ cd /tmp
 git clone https://github.com/phpv8/v8js.git
 cd v8js
 phpize
-./configure --with-v8js=/opt/v8
+./configure --with-v8js=/opt/v8 LDFLAGS="-lstdc++"
 make
 make test
 sudo make install
