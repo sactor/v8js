@@ -51,7 +51,7 @@ fetch v8
 cd v8
 
 # (optional) If you'd like to build a certain version:
-git checkout 5.6.326.12
+git checkout 6.4.388.18
 gclient sync
 
 # Setup GN
@@ -67,6 +67,13 @@ sudo cp out.gn/x64.release/lib*.so out.gn/x64.release/*_blob.bin \
 sudo cp -R include/* /opt/v8/include/
 ```
 
+On Debian Stretch you need to set RPATH on the installed libraries,
+so the library loader finds the dependencies:
+
+```
+sudo apt-get install patchelf
+for A in /opt/v8/lib/*.so; do sudo patchelf --set-rpath '$ORIGIN' $A; done
+```
 
 Compile php-v8js itself
 -----------------------

@@ -8,11 +8,13 @@ V8Js
 
 V8Js is a PHP extension for Google's V8 Javascript engine.
 
-The extension allows you to execute Javascript code in a secure sandbox from PHP. The executed code can be restricted using a time limit and/or memory limit. This provides the possibility to execute untrusted code with confidence.
+The extension allows you to execute Javascript code in a secure sandbox from PHP. The executed code
+can be restricted using a time limit and/or memory limit. This provides the possibility to execute
+untrusted code with confidence.
 
-**This is the PHP 7 branch of V8Js**, it requires PHP 7 and does *not* compile against PHP 5.x versions.
-If you're running PHP 5.x, see the [master branch](https://github.com/phpv8/v8js/tree/master)
-of this repository.
+If you execute untrusted JavaScript code, make sure to **use V8 version 6.4.388.18, 6.5.143 or higher**.
+See notes on [untrusted code mitigations](https://github.com/v8/v8/wiki/Untrusted-code-mitigations)
+for further details.
 
 
 Minimum requirements
@@ -42,18 +44,11 @@ For some very first steps, instead of compiling manually you might want to try o
 image](https://registry.hub.docker.com/u/stesie/v8js/).  It has v8, v8js and php-cli pre-installed
 so you can give it a try with PHP in "interactive mode".  There is no Apache, etc. running however.
 
-For Ubuntu @pinepain has PPAs for V8 [5.1](https://launchpad.net/~pinepain/+archive/ubuntu/libv8-5.1)
-and [5.2](https://launchpad.net/~pinepain/+archive/ubuntu/libv8-5.2).  You might want to install
-these (and compile V8Js based on them).
+For Ubuntu @pinepain has PPAs for [various versions of V8](https://launchpad.net/~pinepain).
+You might want to install these and compile V8Js based on them.
 
-There also is a Heroku extension pack that has recent V8Js versions for both PHP 5.6 and 7.0, see
+There also is a Heroku extension pack that has recent V8Js versions for PHP 7.x, see
 [@stesie's blog post](https://stesie.github.io/2016/03/heroku-custom-platform-repo) for details.
-
-Last but not least there are binaries for Windows (PHP7, x86 including V8 4.9.385.29) that you can use
-with the PHP binaries from http://windows.php.net/download:
-
-* [V8Js for Windows, PHP7.0, x86, thread safe (TS)](https://s3.amazonaws.com/win-phpv8/v8js_vc14_php7_ts.zip)
-* [V8Js for Windows, PHP7.0, x86, non thread safe (NTS)](https://s3.amazonaws.com/win-phpv8/v8js_vc14_php7_nts.zip)
 
 64-bit binaries for Windows [are made available by Jan-E here](https://www.apachelounge.com/viewtopic.php?t=6359).
 
