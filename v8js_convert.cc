@@ -73,7 +73,7 @@ static v8::Local<v8::Value> v8js_hash_to_jsarr(zval *value, v8::Isolate *isolate
 #if PHP_VERSION_ID >= 70300
 	if (i > 0 && myht && GC_IS_RECURSIVE(myht))
 #else
-	if (i > 0 && myht && ZEND_HASH_GET_APPLY_COUNT(myht) > 1) {
+	if (i > 0 && myht && ZEND_HASH_GET_APPLY_COUNT(myht) > 0)
 #endif
 	{
 		return V8JS_NULL;
