@@ -273,9 +273,14 @@ static void v8js_jsext_free_storage(v8js_jsext *jsext) /* {{{ */
 		v8js_free_ext_strarr(jsext->deps, jsext->deps_count);
 	}
 	delete jsext->extension;
+
 	// Free the persisted non-interned strings we allocated.
-	zend_string_release(jsext->name);
-	zend_string_release(jsext->source);
+	if (jsext->name) {
+		zend_string_release(jsext->name);
+	}
+	if (jsext->source) {
+		zend_string_release(jsext->source);
+	}
 
 	free(jsext);
 }
@@ -986,7 +991,10 @@ static void v8js_persistent_zval_ctor(zval *p) /* {{{ */
 static void v8js_persistent_zval_dtor(zval *p) /* {{{ */
 {
 	assert(Z_TYPE_P(p) == IS_STRING);
-	free(Z_STR_P(p));
+
+	if (!ZSTR_IS_INTERNED(Z_STR_P(p))) {
+		free(Z_STR_P(p));
+	}
 }
 /* }}} */
 
