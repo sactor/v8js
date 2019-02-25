@@ -50,6 +50,7 @@ extern "C" {
 #endif
 
 #include <v8.h>
+#include <v8-platform.h>
 
 #include "v8js_class.h"
 #include "v8js_v8.h"
@@ -64,10 +65,6 @@ extern "C" {
 
 /* V8Js Version */
 #define PHP_V8JS_VERSION "2.1.0"
-
-/* Helper macros */
-#define V8JS_GET_CLASS_NAME(var, obj) \
-	v8::String::Utf8Value var(obj->GetConstructorName());
 
 /* Options */
 #define V8JS_FLAG_NONE			(1<<0)
@@ -158,7 +155,7 @@ struct _v8js_process_globals {
 	/* Path to icudtl.dat file */
 	char *icudtl_dat_path;
 
-	v8::Platform *v8_platform;
+	std::unique_ptr<v8::Platform> v8_platform;
 };
 
 extern struct _v8js_process_globals v8js_process_globals;
