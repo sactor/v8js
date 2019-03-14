@@ -137,13 +137,15 @@ void v8js_v8_call(v8js_ctx *c, zval **return_value,
 	tz = getenv("TZ");
 
 	if (tz != NULL) {
-		if (c->tz == NULL) {
-			c->tz = strdup(tz);
-		}
-		else if (strcmp(c->tz, tz) != 0) {
-			c->isolate->DateTimeConfigurationChangeNotification();
-
-			free(c->tz);
+		if (c->tz == NULL || strcmp(c->tz, tz) != 0) {
+#if (V8_MAJOR_VERSION < 7 || (V8_MAJOR_VERSION == 7 && V8_MINOR_VERSION < 5)) && !V8JS_V8_TIME_ZONE_REDETECTION_SUPPORTED
+			v8::Date::DateTimeConfigurationChangeNotification(c->isolate);
+#else
+			v8::Date::DateTimeConfigurationChangeNotification(c->isolate, v8::Date::TimeZoneDetection::kRedetect);
+#endif
+			if (c->tz != NULL) {
+				free(c->tz);
+			}
 			c->tz = strdup(tz);
 		}
 	}
