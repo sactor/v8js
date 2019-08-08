@@ -135,9 +135,7 @@ void v8js_v8_call(v8js_ctx *c, zval **return_value,
 #else
 			v8::Date::DateTimeConfigurationChangeNotification(c->isolate, v8::Date::TimeZoneDetection::kRedetect);
 #endif
-			if (c->tz != NULL) {
-				free(c->tz);
-			}
+			free(c->tz);
 			c->tz = strdup(tz);
 		}
 	}
