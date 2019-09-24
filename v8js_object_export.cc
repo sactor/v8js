@@ -701,13 +701,13 @@ v8::Local<v8::Value> v8js_named_property_callback(v8::Local<v8::Name> property_n
 					v8::Local<v8::FunctionTemplate> ft;
 					try {
 						ft = v8::Local<v8::FunctionTemplate>::New
-							(isolate, ctx->method_tmpls.at(method_ptr));
+							(isolate, ctx->method_tmpls.at(std::make_pair(ce, method_ptr)));
 					}
 					catch (const std::out_of_range &) {
 						ft = v8::FunctionTemplate::New(isolate, v8js_php_callback,
 								v8::External::New((isolate), method_ptr),
 								v8::Signature::New((isolate), tmpl));
-						v8js_function_tmpl_t *persistent_ft = &ctx->method_tmpls[method_ptr];
+						v8js_function_tmpl_t *persistent_ft = &ctx->method_tmpls[std::make_pair(ce, method_ptr)];
 						persistent_ft->Reset(isolate, ft);
 					}
 					ft->GetFunction(v8_context).ToLocal(&ret_value);
@@ -1049,13 +1049,12 @@ static v8::Local<v8::Object> v8js_wrap_array_to_object(v8::Isolate *isolate, zva
 				newobj->Set(v8_context, V8JS_STRL(ZSTR_VAL(key), static_cast<int>(ZSTR_LEN(key))),
 					zval_to_v8js(data, isolate));
 			} else {
-				if (index > std::numeric_limits<uint32_t>::max()) {
-					zend_throw_exception(php_ce_v8js_exception,
-						"Array index exceeds maximum supported bound", 0);
-					continue;
+				if (index < (ulong) std::numeric_limits<uint32_t>::min() || index > (ulong) std::numeric_limits<uint32_t>::max()) {
+					std::string indexstr = std::to_string(index);
+					newobj->Set(v8_context, v8::String::NewFromUtf8(isolate, indexstr.c_str(), v8::String::kNormalString, indexstr.length()), zval_to_v8js(data, isolate TSRMLS_CC));
+				} else {
+					newobj->Set(v8_context, static_cast<uint32_t>(index), zval_to_v8js(data, isolate));
 				}
-
-				newobj->Set(v8_context, static_cast<uint32_t>(index), zval_to_v8js(data, isolate));
 			}
 
 		} ZEND_HASH_FOREACH_END();

@@ -30,6 +30,7 @@ extern "C" {
 }
 
 #include <libplatform/libplatform.h>
+#include "namespace_hack.h"
 
 
 void v8js_v8_init() /* {{{ */
