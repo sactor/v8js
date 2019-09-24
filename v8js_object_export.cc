@@ -863,9 +863,9 @@ static void v8js_named_property_deleter(v8::Local<v8::Name> property, const v8::
 	}
 
 	v8::Isolate *isolate = info.GetIsolate();
-	v8::MaybeLocal<v8::Boolean> value = r->ToBoolean(isolate->GetEnteredContext());
+	v8::Local<v8::Boolean> value = r->ToBoolean(isolate);
 	if (!value.IsEmpty()) {
-		info.GetReturnValue().Set(value.ToLocalChecked());
+		info.GetReturnValue().Set(value);
 	}
 }
 /* }}} */
@@ -1051,7 +1051,7 @@ static v8::Local<v8::Object> v8js_wrap_array_to_object(v8::Isolate *isolate, zva
 			} else {
 				if (index < (ulong) std::numeric_limits<uint32_t>::min() || index > (ulong) std::numeric_limits<uint32_t>::max()) {
 					std::string indexstr = std::to_string(index);
-					newobj->Set(v8_context, v8::String::NewFromUtf8(isolate, indexstr.c_str(), v8::String::kNormalString, indexstr.length()), zval_to_v8js(data, isolate TSRMLS_CC));
+					newobj->Set(v8_context, (v8::String::NewFromUtf8(isolate, indexstr.c_str(), v8::NewStringType::kNormal, indexstr.length())).ToLocalChecked(), zval_to_v8js(data, isolate));
 				} else {
 					newobj->Set(v8_context, static_cast<uint32_t>(index), zval_to_v8js(data, isolate));
 				}
