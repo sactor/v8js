@@ -82,6 +82,10 @@ int v8js_get_properties_hash(v8::Local<v8::Value> jsValue, HashTable *retval, in
 	(ctx) = Z_V8JS_CTX_OBJ_P(object); \
 	V8JS_CTX_PROLOGUE(ctx);
 
+#define V8JS_BEGIN_CTX_EX(ctx, object, ret) \
+	v8js_ctx *(ctx); \
+	(ctx) = Z_V8JS_CTX_OBJ_P(object); \
+	V8JS_CTX_PROLOGUE_EX(ctx, ret);
 
 #endif /* V8JS_V8_H */
 
