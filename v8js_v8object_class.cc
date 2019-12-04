@@ -46,6 +46,11 @@ static zend_object_handlers v8js_v8generator_handlers;
 
 /* V8 Object handlers */
 
+static zval* v8js_v8object_property_ptr_ptr(zval *object, zval *member, int type, void **cache_slot)
+{
+	return NULL;
+}
+
 static int v8js_v8object_has_property(zval *object, zval *member, int has_set_exists, void **cache_slot) /* {{{ */
 {
 	/* param has_set_exists:
