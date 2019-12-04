@@ -46,6 +46,11 @@ static zend_object_handlers v8js_v8generator_handlers;
 
 /* V8 Object handlers */
 
+static zval* v8js_v8object_property_ptr_ptr(zval *object, zval *member, int type, void **cache_slot)
+{
+	return NULL;
+}
+
 static int v8js_v8object_has_property(zval *object, zval *member, int has_set_exists, void **cache_slot) /* {{{ */
 {
 	/* param has_set_exists:
@@ -814,7 +819,7 @@ PHP_MINIT_FUNCTION(v8js_v8object_class) /* {{{ */
 	memcpy(&v8js_v8object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	v8js_v8object_handlers.clone_obj = NULL;
 	v8js_v8object_handlers.cast_object = NULL;
-	v8js_v8object_handlers.get_property_ptr_ptr = NULL;
+	v8js_v8object_handlers.get_property_ptr_ptr = v8js_v8object_property_ptr_ptr;;
 	v8js_v8object_handlers.has_property = v8js_v8object_has_property;
 	v8js_v8object_handlers.read_property = v8js_v8object_read_property;
 	v8js_v8object_handlers.write_property = v8js_v8object_write_property;
