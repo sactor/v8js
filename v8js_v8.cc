@@ -61,10 +61,7 @@ void v8js_v8_init() /* {{{ */
 	);
 #else
 	/* V8 doesn't work without startup data, load it. */
-	v8::V8::InitializeExternalStartupData(
-		PHP_V8_NATIVES_BLOB_PATH,
-		PHP_V8_SNAPSHOT_BLOB_PATH
-	);
+	v8::V8::InitializeExternalStartupDataFromFile(PHP_V8_SNAPSHOT_BLOB_PATH);
 #endif
 #endif
 
