@@ -1099,7 +1099,10 @@ v8::Local<v8::Value> v8js_hash_to_jsobj(zval *value, v8::Isolate *isolate) /* {{
 	if (ce == php_ce_v8function || ce == php_ce_v8object || ce == php_ce_v8generator) {
 		v8js_v8object *c = Z_V8JS_V8OBJECT_OBJ_P(value);
 
-		if(isolate != c->ctx->isolate) {
+		if(isolate != c->ctx->isolate) { 
+			if (V8JSG(throw_exception_wrong_instance)) {
+				zend_throw_exception(php_ce_v8js_exception, "V8Function object passed to wrong V8JS instance", 0);
+			}
 			php_error_docref(NULL, E_WARNING, "V8Function object passed to wrong V8Js instance");
 			return V8JS_NULL;
 		}
