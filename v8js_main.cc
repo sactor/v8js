@@ -112,11 +112,19 @@ static ZEND_INI_MH(v8js_OnUpdateUseArrayAccess) /* {{{ */
 }
 /* }}} */
 
+static ZEND_INI_MH(v8js_OnUpdateThrowExceptionWrongInstance) /* {{{ */
+{
+	V8JSG(throw_exception_wrong_instance) = v8js_ini_to_bool(new_value);
+	return SUCCESS;
+}
+/* }}} */
+
 ZEND_INI_BEGIN() /* {{{ */
 	ZEND_INI_ENTRY("v8js.flags", NULL, ZEND_INI_ALL, v8js_OnUpdateV8Flags)
 	ZEND_INI_ENTRY("v8js.icudtl_dat_path", NULL, ZEND_INI_ALL, v8js_OnUpdateIcudatPath)
 	ZEND_INI_ENTRY("v8js.use_date", "0", ZEND_INI_ALL, v8js_OnUpdateUseDate)
 	ZEND_INI_ENTRY("v8js.use_array_access", "0", ZEND_INI_ALL, v8js_OnUpdateUseArrayAccess)
+	ZEND_INI_ENTRY("v8js.throw_exception_wrong_instance", "0", ZEND_INI_ALL, v8js_OnUpdateThrowExceptionWrongInstance)
 ZEND_INI_END()
 /* }}} */
 

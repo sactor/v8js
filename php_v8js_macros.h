@@ -121,6 +121,7 @@ ZEND_BEGIN_MODULE_GLOBALS(v8js)
   bool timer_stop;
 
   bool fatal_error_abort;
+  bool throw_exception_wrong_instance;
 ZEND_END_MODULE_GLOBALS(v8js)
 
 extern zend_v8js_globals v8js_globals;
