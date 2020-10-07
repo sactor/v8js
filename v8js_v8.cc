@@ -138,7 +138,7 @@ void v8js_v8_call(v8js_ctx *c, zval **return_value,
 #if (V8_MAJOR_VERSION < 7 || (V8_MAJOR_VERSION == 7 && V8_MINOR_VERSION < 5)) && !V8JS_V8_TIME_ZONE_REDETECTION_SUPPORTED
 			isolate->DateTimeConfigurationChangeNotification();
 #else
-			isolate->DateTimeConfigurationChangeNotification(v8::Date::TimeZoneDetection::kRedetect);
+			isolate->DateTimeConfigurationChangeNotification(v8::Isolate::TimeZoneDetection::kRedetect);
 #endif
 			if (c->tz != NULL) {
 				free(c->tz);
